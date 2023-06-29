@@ -1,0 +1,350 @@
+= ditaa
+
+[caption=]
+.Example
+====
+[ditaa]
+----
+                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--> |               |
+ |  Text  |   +-------------+    |   Beautiful   |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+----
+====
+
+== Syntax
+
+*Round corners*
+
+If you use `/` and `\` to connect corners, they are rendered as round corners:
+
+// because of | is a keyword,so use \|
+[cols="a,a"]
+|===
+|before processing |render
+
+|
+----
+/--+
+\|  \|
++--/
+----
+
+|
+[ditaa]
+----
+/--+
+\|  \|
++--/
+----
+
+|===
+
+*Color*
+
+Color codes can be used to add color to the diagrams. The syntax of color codes is
+
+`cXXX`
+
+where `XXX` is a hex number. The first digit of the number represents the red compoment of the color, the second digit represents green and the third blue (good ol' RGB). See below for an example of use of color codes:
+
+|===
+|before processing |render
+
+a|
+----
+/----\ /----\
+\|c33F\| \|cC02\|
+\|    \| \|    \|
+\----/ \----/
+
+/----\ /----\
+\|c1FF\| \|c1AB\|
+\|    \| \|    \|
+\----/ \----/
+----
+
+a|
+[ditaa]
+----
+/----\ /----\
+\|c33F\| \|cC02\|
+\|    \| \|    \|
+\----/ \----/
+
+/----\ /----\
+\|c1FF\| \|c1AB\|
+\|    \| \|    \|
+\----/ \----/
+----
+
+|===
+
+This can become a bit tedious after a while, so there are (only some for now) human readable color codes provided:
+
+
+
+[cols="5,3"]
+|===
+|before processing |render
+
+a|
+----
+/-------------+-------------\
+\|cRED RED     \|cBLU BLU     \|
++-------------+-------------+
+\|cGRE GRE     \|cPNK PNK     \|
++-------------+-------------+
+\|cBLK BLK     \|cYEL YEL     \|
+\-------------+-------------/
+----
+
+a|
+[ditaa]
+----
+/-------------+-------------\
+\|cRED RED     \|cBLU BLU     \|
++-------------+-------------+
+\|cGRE GRE     \|cPNK PNK     \|
++-------------+-------------+
+\|cBLK BLK     \|cYEL YEL     \|
+\-------------+-------------/
+----
+
+|===
+
+As you can see above, if a colored shape contains any text, the color of the text is adjusted according to the underlying color. If the undelying color is dark, the text color is changed to white (from the default black).
+
+Note that color codes only apply if they are within closed shapes, and they have no effect anywhere outside.
+
+*Tags*
+
+ditaa recognises some tags that change the way a rectangular shape is rendered. All tags are between `{` and `}`. See the table below:
+
+[cols="d,a,a,d"]
+|===
+|Name	|Original	|Rendered	|Comment
+
+|Document	
+|
+----
++-----+
+\|{d}  \|
+\|     \|
+\|     \|
++-----+
+----
+|
+[ditaa]
+----
++-----+
+\|{d}  \|
+\|     \|
+\|     \|
++-----+
+----		  
+|Symbol representing a document.
+
+|Storage	
+|
+----
++-----+
+\|{s}  \|
+\|     \|
+\|     \|
++-----+
+----
+|
+[ditaa]
+----
++-----+
+\|{s}  \|
+\|     \|
+\|     \|
++-----+
+----
+|Symbol representing a form of storage,
+like a database or a hard disk.
+
+|Input/Output	
+|
+----
++-----+
+\|{io} \|
+\|     \|
+\|     \|
++-----+
+----
+|
+[ditaa]
+----
++-----+
+\|{io} \|
+\|     \|
+\|     \|
++-----+
+----
+|Symbol representing input/output.
+
+|===
+
+*Dashed lines*
+
+Any lines that contain either at least one = (for horizontal lines) or at least one : (for vertical lines) are rendered as dashed lines. Only one of those characters can make a whole line dashed, so this feature "spreads". The rationale behind that is that you only have to change one character to switch from normal to dashed (and vice versa), rather than redrawing the whole line/shape. Special symbols (like document or storage symbols) can also be dashed. See below:
+
+
+----+  /----\  +----+
+    :  |    |  :    |
+    |  |    |  |{s} |
+    v  \-=--+  +----+
+
+[cols="a,a"]
+|===
+|before processing |render
+
+|
+----
+----+
+    : 
+    \|  
+    v
+----
+
+|
+[ditaa]
+----
+----+
+    : 
+    \|  
+    v
+----
+
+|
+----
+/----\
+\|    \| 
+\|    \| 
+\-=--+ 
+----
+
+|
+[ditaa]
+----
+/----\
+\|    \| 
+\|    \| 
+\-=--+ 
+----
+
+|
+----
++----+
+:    \|
+\|{s} \|
++----+
+----
+
+|
+[ditaa]
+----
++----+
+:    \|
+\|{s} \|
++----+
+----
+
+|===
+
+*Point markers*
+
+If `*` is encountered on a line (but not at the end of the line), it is rendered as a special marker, called the point marker (this feature is still experimental). See below:
+
+[cols="a,a"]
+|===
+|before processing |render
+
+|
+----
+*----*
+\|    \|      
+*    *      
+\|    \|  
+*----*
+----
+
+|
+[ditaa]
+----
+*----*
+\|    \|      
+*    *      
+\|    \|  
+*----*
+----
+
+|
+----
+    /--*
+    \|
+-*--+
+----
+
+|
+[ditaa]
+----
+    /--*
+    \|
+-*--+
+----
+|
+
+|===
+
+*Text handling*
+
+(This section is still being written)
+
+If the pattern ' o XXXXX' is encountered, where XXXXX is any text, the 'o' is interpreted and rendered as a bullet point. Note that there must be a space before the 'o' as well as after it. See below:
+
+[cols="a,a"]
+|===
+|before processing |render
+
+|
+----
+/-----------------\
+\| Things to do    \|
+\| cGRE            \|
+\| o Cut the grass \|
+\| o Buy jam       \|
+\| o Fix car       \|
+\| o Make website  \|
+\-----------------/
+----
+
+|
+[ditaa]
+----
+/-----------------\
+\| Things to do    \|
+\| cGRE            \|
+\| o Cut the grass \|
+\| o Buy jam       \|
+\| o Fix car       \|
+\| o Make website  \|
+\-----------------/
+----
+
+|===

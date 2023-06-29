@@ -1,0 +1,8 @@
+= Overview
+Asciidoctor Diagram is a set of Asciidoctor extensions that enable rendering of plain tesxt diagrams that are embedded in your AsciiDoc document as part of the Asciidoctor conversion process.
+
+Each extensions will invoke the necessary external diagram rendering tools to produce an image file which is inserted into your converted document.
+
+The extensions support the ASCIIToSVG, BlockDiag (BlockDiag, SeqDiag, ActDiag, NwDiag / RackDiag / PacketDiag), Bytefield-SVG, DBML, Ditaa, Dpic, Erd, Gnuplot, Graphviz, Mermaid, MscGen, Nomnoml, Pikchr, PlantUML, Shaape, State Machine Cat, Structurizr, SvgBob, Symbolator, Syntrax / JSyntrax, UMLet, Vega / Vega-Lite, and WaveDrom syntax.
+
+Asciidoctor Diagram was inspired by the AsciiDoc PlantUML filter.
